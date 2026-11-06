@@ -2,6 +2,8 @@
 
 Published bundles exported from MeshMesh, Claude, and Cursor. Each tool has its own directory. Each bundle is one directory under that tool, with its entry file at the root of the bundle.
 
+These recipes and skills run after a demo org already exists and Revenue Cloud is already set up. QuantumBit is the usual target. They cover the follow-on actions on that org. Org creation and the base Revenue Cloud build stay in the foundations build.
+
 MeshMesh is the only one of the three that uses a recipe. Claude and Cursor use skills.
 
 | Tool | Path | Entry file |
