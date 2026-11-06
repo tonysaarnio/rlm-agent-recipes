@@ -1,0 +1,218 @@
+{
+  "_comment": "Defaults for the Revenue Management Intelligence recipe. Names/SKUs are resolved to IDs in the target org at run time. Override any value before running.",
+  "org_alias": "{{ORG_ALIAS}}",
+  "api_version": "68.0",
+  "data_space": "default",
+  "setup_page_path": "/lightning/setup/RevenueLifecycleIntelligence/home",
+  "tableau_next_setup_path": "/lightning/setup/EasySetup/home",
+  "app_hub_path": "/lightning/setup/AppHub/home",
+  "data_bundles_in_order": [
+    "Asset Bundle",
+    "Pricing Bundle",
+    "DRO Bundle",
+    "Common Billing Bundle",
+    "Advanced Billing Bundle"
+  ],
+  "apps_in_install_order": [
+    {
+      "section": "Revenue Cloud Dynamic Revenue Orchestrator Analytics",
+      "label": "DRO Analytics",
+      "expected_dashboards": [
+        "Order Analysis",
+        "Order Details"
+      ],
+      "expected_semantic_model": "DRO_SDM"
+    },
+    {
+      "section": "Billing Analytics",
+      "label": "Billing Analytics",
+      "expected_dashboards": [
+        "Billing Insights",
+        "Aging Invoices",
+        "Net Account Balance",
+        "Billing Forecast Console"
+      ],
+      "expected_semantic_model": "BillingCentralSemanticModel"
+    },
+    {
+      "section": "Subscription Analytics",
+      "label": "Subscription Analytics",
+      "expected_dashboards": [
+        "QOCAL Overview",
+        "QOCAL Renewals and Churn"
+      ],
+      "expected_semantic_model": "QOCAL Semantic Model"
+    }
+  ],
+  "skipped_apps": [
+    {
+      "section": "Pricing Analytics",
+      "reason": "Known product defect in Price Analytics template sfdc_internal__ngp v1.1 (OrderCostBook view). Fix planned for the next release. Do not install until the template version is > 1.1."
+    }
+  ],
+  "connector_permission_set_label": "Data Cloud Salesforce Connector",
+  "connector_system_permissions": [
+    "PermissionsCorePricingRunTimeUser",
+    "PermissionsQuoteToOrderUser",
+    "PermissionsCoreCPQUser",
+    "PermissionsDfoAdminUser",
+    "PermissionsBillingSetupAccess",
+    "PermissionsEditBillingInfo",
+    "PermissionsRlmBillingAccess",
+    "PermissionsRunDPEDefForNextGenBilling",
+    "PermissionsViewAllData",
+    "PermissionsViewAllFieldsGlobal"
+  ],
+  "admin_permission_sets": [
+    "AnalyticsStoreUser",
+    "PulseRuntimeUser"
+  ],
+  "data_readiness_minimums": {
+    "Order (Activated)": 25,
+    "Asset": 25,
+    "FulfillmentPlan": 10,
+    "Invoice (Posted)": 5
+  },
+  "sample_data": {
+    "accounts": "auto",
+    "_accounts_note": "'auto' = every account with a billing or shipping street AND at least one contact (minus exclude_accounts), capped at max_accounts. Or give an explicit list of account names.",
+    "primary_account": "Acme",
+    "exclude_accounts": [
+      "POC Phase0 Test",
+      "salesforce.com",
+      "Sample Account for Entitlements"
+    ],
+    "max_accounts": 10,
+    "bill_to_contact_name": null,
+    "simple_txn_count": 30,
+    "simple_concurrency": 6,
+    "bundle_txn_count": 10,
+    "bundle_concurrency": 4,
+    "start_date_spread_days": 365,
+    "discount_probability": 0.55,
+    "simple_products": [
+      {
+        "sku": "QB-SUPP-2000",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-SUPP-1000",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-SUPP-1005",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-API-MGMT",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "TEST-SUB",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-GEN-AI-LIC",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-LIC-CLOUD",
+        "model": "Term Annual"
+      },
+      {
+        "sku": "QB-API-MGMT",
+        "model": "Term Monthly"
+      },
+      {
+        "sku": "TEST-SUB",
+        "model": "Term Monthly"
+      },
+      {
+        "sku": "TEST-SUB",
+        "model": "Evergreen Monthly"
+      },
+      {
+        "sku": "QB-API-MGMT",
+        "model": "Evergreen Monthly"
+      },
+      {
+        "sku": "QB-TRN-ESSNTLS",
+        "model": "One-Time"
+      },
+      {
+        "sku": "QB-SRV-SOW",
+        "model": "One-Time"
+      },
+      {
+        "sku": "QB-VegaX200",
+        "model": "One-Time"
+      },
+      {
+        "sku": "QB-NovaX150",
+        "model": "One-Time"
+      },
+      {
+        "sku": "QB-SSD 30TB",
+        "model": "One-Time"
+      },
+      {
+        "sku": "QB-INTEL-GOLD-6354",
+        "model": "One-Time"
+      }
+    ],
+    "excluded_products": [
+      {
+        "sku": "QB-TRN-FUND",
+        "reason": "Quote placement fails with UNKNOWN_EXCEPTION 'hydrating additional context fields' on R264 QuantumBit data"
+      }
+    ],
+    "bundle_product": {
+      "sku": "QB-COMPLETE",
+      "models_with_weights": [
+        {
+          "model": "Term Annual",
+          "weight": 45
+        },
+        {
+          "model": "Term Monthly",
+          "weight": 30
+        },
+        {
+          "model": "Evergreen Monthly",
+          "weight": 15
+        },
+        {
+          "model": "One-Time",
+          "weight": 10
+        }
+      ]
+    },
+    "total_txn_count": 50,
+    "_volume_note": "Default 50 transactions total: 30 simple new sales (incl. 17 coverage), 10 bundle orders with posted invoices (incl. 4 coverage), 10 lifecycle transactions on existing term assets (~4 upsell, ~3 downsell, ~3 renewal). Spread across accounts and their currencies. Only exceed if the user explicitly asks.",
+    "lifecycle_txn_count": 10,
+    "lifecycle_mix": {
+      "upsell": 40,
+      "downsell": 30,
+      "renewal": 30
+    },
+    "renewal_window_days": 400
+  },
+  "dashboard_tabs": [
+    {
+      "tab": "RMI_Order_Analytics",
+      "label": "Order Analytics",
+      "app_developer_name": "standard__IndustriesDfo",
+      "app_label": "Dynamic Revenue Orchestrator",
+      "insert_after_tab": "standard-Order",
+      "console_app": true
+    },
+    {
+      "tab": "RMI_Subscription_Analytics",
+      "label": "Subscription Analytics",
+      "app_developer_name": "RLM_Revenue_Cloud",
+      "app_label": "Revenue Cloud",
+      "insert_after_tab": "standard-Asset",
+      "console_app": false
+    }
+  ]
+}
