@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OrchestrationPlanCtxMapping xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Billing Orchestration Plan Context Mapping</label>
+    <orchestrationType>Billing</orchestrationType>
+    <contextDefinition>BillingCollectionPlanContext__stdctx</contextDefinition>
+    <objectName>CollectionPlan</objectName>
+    <contextMapping>CollectionPlanBillingMapping</contextMapping>
+    <contextRootNode>CollectionPlan__std</contextRootNode>
+    <contextItemNode>CollectionPlanItem__std</contextItemNode>
+</OrchestrationPlanCtxMapping>

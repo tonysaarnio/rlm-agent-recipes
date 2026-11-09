@@ -1,0 +1,53 @@
+{
+  "promotionDetails": {
+    "additionalFieldValues": { "attributes": {} },
+    "name": "<PROMO_NAME>",
+    "displayName": "<PROMO_DISPLAY_NAME>",
+    "description": "<PROMO_DESCRIPTION>",
+    "isAutomatic": false,
+    "isEmailActivated": false,
+    "priorityNumber": 2,
+    "promotionEligibility": {
+      "eligibleCustomerEvents": {},
+      "eligibleEnrollmentPeriod": { "isEnrollmentRequired": false },
+      "eligibleProducts": [
+        { "id": "<TARGET_PRODUCT_ID (bundle root allowed)>", "name": "<TARGET_PRODUCT_NAME>", "productType": "SimpleProduct" }
+      ]
+    },
+    "promotionLimits": {},
+    "ruleLibrary": { "id": "<RULE_LIBRARY_ID>", "name": "<RULE_LIBRARY_NAME>" },
+    "startDateTime": "<START_DATETIME_UTC>",
+    "endDateTime": "<END_DATETIME_UTC>"
+  },
+  "rules": [
+    {
+      "eventConfiguration": [],
+      "journalSubType": null,
+      "journalSubTypeName": null,
+      "journalType": "Customer Purchase",
+      "priority": 10,
+      "ruleName": "rule",
+      "templateName": "GetRewardsBasedOnSellingModel",
+      "rewardConfiguration": [
+        {
+          "type": "PSMDiscount",
+          "scope": "SimpleProduct",
+          "scopeDetails": [ { "id": "<TARGET_PRODUCT_ID>", "name": "<TARGET_PRODUCT_NAME>" } ],
+          "doNotDefineRewards": false,
+          "isPrimaryReward": false,
+          "childProducts": [],
+          "rewardDetailsList": [
+            { "productSellingModel": { "id": "<PSM_ID_1>", "name": "<PSM_NAME_1>" }, "discountType": "PercentageOff", "discountValue": 10 },
+            { "productSellingModel": { "id": "<PSM_ID_2>", "name": "<PSM_NAME_2>" }, "discountType": "PercentageOff", "discountValue": 10 }
+          ]
+        }
+      ]
+    }
+  ],
+  "_notes": [
+    "Remove this _notes key before sending. POST to /services/data/v68.0/global-promotions-management/promotions.",
+    "isAutomatic=false makes this a manual/coupon promotion. The coupon code itself is a separate Coupon record created after this POST, then Promotion.IsActive=true (setup-walkthrough.md step 8).",
+    "Activation needs the shouldEvaluatePromotions and cartLineCouponCode tag mappings on the rule library version.",
+    "Worked example (QuantumBit, meshmesh org): 'QBLAUNCH Coupon Promotion', 10% off QuantumBit Complete Solution (bundle root) on Term Annual, Term Monthly, Evergreen Monthly, One-Time; coupon code QBLAUNCH."
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "_comment": "SavedPaymentMethod record that the Billing 'Create Billing Promise to Pay' flow (billing__CreateBillingPromisetoPay) lists in its Saved Payment Method grid. Required in testing: Name, MerchantAccountId, ReferenceOwnerId, PaymentGatewayId, Status, UsageType, Type, GatewayReference. A CardPaymentMethod created by the tokenize API alone is NOT listed by the flow.",
+  "sobject": "SavedPaymentMethod",
+  "values": {
+    "Name": "Visa ending 4242",
+    "MerchantAccountId": "{{MERCHANT_ACCOUNT_ID}}",
+    "ReferenceOwnerId": "{{ACCOUNT_ID}}",
+    "PaymentGatewayId": "{{PAYMENT_GATEWAY_ID}}",
+    "Status": "Active",
+    "UsageType": "OffSession",
+    "Type": "card",
+    "GatewayReference": "{{GATEWAY_PAYMENT_METHOD_REFERENCE}}",
+    "GatewayToken": "{{GATEWAY_TOKEN_FROM_TOKENIZE_RESPONSE}}",
+    "AccountHolderName": "{{CARD_HOLDER_NAME}}",
+    "Network": "visa",
+    "Last4": "4242",
+    "ExpiryMonth": 12,
+    "ExpiryYear": 2030,
+    "IsDefault": true,
+    "ProcessingMode": "External"
+  }
+}

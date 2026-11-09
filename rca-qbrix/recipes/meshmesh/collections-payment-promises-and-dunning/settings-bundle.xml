@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Settings used by the Collections + Dunning recipe. Split each block into its own file
+  under settings/ in a metadata-dir deploy (file names WITHOUT -meta.xml):
+    settings/Billing.settings
+    settings/Industries.settings
+    settings/DynamicFulfillmentOrchestrator.settings
+    settings/Payments.settings
+  package.xml version MUST be 68.0+ (enableDunningOrchestration is invalid on 66.0).
+  WARNING: enableTimelinePref, enableCollectionTimeline and enableDunningOrchestration cannot be turned off.
+-->
+<settingsBundle>
+
+<!-- ===== settings/Billing.settings ===== -->
+<BillingSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableDunningOrchestration>true</enableDunningOrchestration>
+    <!-- Already on in most RCB orgs; auto-creates a Draft payment schedule per posted invoice
+         when no payment method exists (must be canceled before a payment promise). -->
+    <enablePaymentSchedulesAndItemsCreation>true</enablePaymentSchedulesAndItemsCreation>
+</BillingSettings>
+
+<!-- ===== settings/Industries.settings ===== -->
+<IndustriesSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableTimelinePref>true</enableTimelinePref>
+    <enableCollectionTimeline>true</enableCollectionTimeline>
+</IndustriesSettings>
+
+<!-- ===== settings/DynamicFulfillmentOrchestrator.settings ===== -->
+<DynamicFulfillmentOrchestratorSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enableDFOPref>true</enableDFOPref>
+    <enableDROFutureDatedTasks>true</enableDROFutureDatedTasks>
+</DynamicFulfillmentOrchestratorSettings>
+
+<!-- ===== settings/Payments.settings ===== -->
+<PaymentsSettings xmlns="http://soap.sforce.com/2006/04/metadata">
+    <enablePayments>true</enablePayments>
+</PaymentsSettings>
+
+</settingsBundle>

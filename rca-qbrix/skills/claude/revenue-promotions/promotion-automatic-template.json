@@ -1,0 +1,54 @@
+{
+  "promotionDetails": {
+    "additionalFieldValues": { "attributes": {} },
+    "name": "<PROMO_NAME>",
+    "displayName": "<PROMO_DISPLAY_NAME>",
+    "description": "<PROMO_DESCRIPTION>",
+    "isAutomatic": true,
+    "isEmailActivated": false,
+    "priorityNumber": 1,
+    "promotionEligibility": {
+      "eligibleCustomerEvents": {},
+      "eligibleEnrollmentPeriod": { "isEnrollmentRequired": false },
+      "eligibleProducts": [
+        { "id": "<TARGET_PRODUCT_ID>", "name": "<TARGET_PRODUCT_NAME>", "productType": "SimpleProduct" }
+      ]
+    },
+    "promotionLimits": {},
+    "ruleLibrary": { "id": "<RULE_LIBRARY_ID>", "name": "<RULE_LIBRARY_NAME>" },
+    "startDateTime": "<START_DATETIME_UTC e.g. 2026-11-01T08:00:00.000Z>",
+    "endDateTime": "<END_DATETIME_UTC e.g. 2026-11-30T23:59:00.000Z>"
+  },
+  "rules": [
+    {
+      "eventConfiguration": [],
+      "journalSubType": null,
+      "journalSubTypeName": null,
+      "journalType": "Customer Purchase",
+      "priority": 10,
+      "ruleName": "rule",
+      "templateName": "GetRewardsBasedOnSellingModel",
+      "rewardConfiguration": [
+        {
+          "type": "PSMDiscount",
+          "scope": "SimpleProduct",
+          "scopeDetails": [ { "id": "<TARGET_PRODUCT_ID>", "name": "<TARGET_PRODUCT_NAME>" } ],
+          "doNotDefineRewards": false,
+          "isPrimaryReward": false,
+          "childProducts": [],
+          "rewardDetailsList": [
+            { "productSellingModel": { "id": "<PSM_ID_1>", "name": "<PSM_NAME_1>" }, "discountType": "PercentageOff", "discountValue": 10 },
+            { "productSellingModel": { "id": "<PSM_ID_2>", "name": "<PSM_NAME_2>" }, "discountType": "PercentageOff", "discountValue": 10 }
+          ]
+        }
+      ]
+    }
+  ],
+  "_notes": [
+    "Remove this _notes key before sending. POST to /services/data/v68.0/global-promotions-management/promotions, then set Promotion.IsActive=true (setup-walkthrough.md step 7).",
+    "Add one rewardDetailsList entry per ProductSellingModel attached to the product (query ProductSellingModelOption). A missing PSM means no discount for lines using that PSM.",
+    "productType and scope MUST be SimpleProduct even for bundle roots; Bundle/BundleProduct/ProductBundle are rejected.",
+    "The promotion applies only while today is between startDateTime and endDateTime.",
+    "Worked example (QuantumBit, meshmesh org): name 'QuantumBit Launch Promotion', 10% off QuantumBit Subscription on Term Annual, Term Monthly, Evergreen Monthly, Evergreen Annual; Nov 1-30 2026; rule library 'QB Promotions'."
+  ]
+}
