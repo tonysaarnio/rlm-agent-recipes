@@ -1,7 +1,7 @@
 ---
 name: revenue-promotions
 description: >-
-  RCA Qbrix post-spin skill: set up, verify and troubleshoot Revenue Cloud Global
+  MeshMesh recipes post-spin skill: set up, verify and troubleshoot Revenue Cloud Global
   Promotions on quotes, by hand, in an org that is already built and pricing QuantumBit
   quotes. Covers the Global Promotions Management settings, licenses and permission sets,
   a promotions rule library with its Custom Tag Mappings, the Promotion Execution step in
@@ -14,15 +14,16 @@ description: >-
 
 # Revenue Promotions — Global Promotions on Quotes (Automatic + Coupon)
 
-An RCA Qbrix post-spin skill. Use it to turn on Revenue Cloud **Global Promotions** in an
+A MeshMesh recipes post-spin skill. Use it to turn on Revenue Cloud **Global Promotions** in an
 org where they are off, then create promotions that apply at pricing. An **automatic**
 promotion discounts a quote line on its own. A **coupon** (manual) promotion is one a
 seller switches on from the line's Promotions tab.
 
 It is the skill form of the MeshMesh recipe
-`rca-qbrix/recipes/meshmesh/revenue-cloud-promotions-automatic-coupon/recipe.md`, with what
-the run taught. The router for RCA Qbrix bundles is `.cursor/skills/rca-qbrix/SKILL.md`.
-Run this bundle from where it sits; don't copy it into `.cursor/skills/`.
+`meshmesh-recipes/recipes/meshmesh/revenue-cloud-promotions-automatic-coupon/recipe.md`, with what
+the run taught. The router for MeshMesh recipes is `.cursor/skills/meshmesh-recipes/SKILL.md`,
+which Claude Code reaches as `.claude/skills/meshmesh-recipes`. Run this bundle from where it sits;
+don't copy it into `.claude/skills/` or `.cursor/skills/`.
 
 It assumes `prepare_rlm_org` has already built the org, and it never runs or changes that
 build. Run the Discovery queries first and do only the steps they show are missing.
@@ -38,10 +39,10 @@ build. Run the Discovery queries first and do only the steps they show are missi
 > Promotion Execution in the default pricing procedure can change other pricing beats
 > (derived pricing such as Software Maintenance), and that those need a re-test.
 
-## Running it in Cursor
+## Running it in Claude Code
 
-Run `sf` commands in the terminal. Do the UI-only steps by driving the pages with the
-browser tool. The playwright-cli tips in
+Run `sf` commands with the Bash tool. Do the UI-only steps by driving the pages with a
+browser tool the session has, such as a Playwright MCP server. The playwright-cli tips in
 [`browser-automation-appendix.md`](browser-automation-appendix.md) are optional. If that
 doesn't work, give the user the step from [`setup-walkthrough.md`](setup-walkthrough.md)
 and wait for them to confirm it is done before going on.
@@ -121,7 +122,7 @@ sf data query --query "SELECT Id, ApiName, VersionNumber, Status, RuleLibrary.Ap
 
 # Promotions and coupons
 sf data query --query "SELECT Id, Name, IsActive, IsAutomatic, PriorityNumber, StartDateTime, EndDateTime FROM Promotion" --target-org <sf_alias>
-sf data query --query "SELECT CouponCode, Status, Type, Promotion.Name FROM Coupon" --target-org <sf_alias>
+sf data query --query "SELECT CouponCode, Status, Promotion.Name FROM Coupon" --target-org <sf_alias>
 
 # Every selling model on a target product (one reward entry each)
 sf data query --query "SELECT ProductSellingModel.Id, ProductSellingModel.Name FROM ProductSellingModelOption WHERE Product2.StockKeepingUnit = '<SKU>'" --target-org <sf_alias>
@@ -143,11 +144,17 @@ Step 1's switches set `enableUnifiedPromotions`, `enableGlobalPromotionsEvaluati
 must also be `true`. It was on the meshmesh org; on a fresh scratch org no Setup switch
 sets it, including Promotions for Transactions on Revenue Settings, and step 1b deploys it.
 
-The tag mappings have no API, metadata or sObject surface that this repo has found. The
-retrieved `RuleLibraryDefinition` names the mappings (`cartLineCouponCode`) but not the tags
-they map to, so read them on the rule library version's Custom Tag Mapping card. Promotions
-for Transactions is not in the retrieved `RevenueManagementSettings`; read it on Revenue
-Settings.
+The tag mappings have no metadata or sObject surface. The retrieved `RuleLibraryDefinition`
+names the mappings (`cartLineCouponCode`) but not the tags they map to. Read them on the rule
+library version's Custom Tag Mapping card, or from the undocumented Connect resource that
+card saves through:
+
+```bash
+sf api request rest "/services/data/v68.0/connect/context-rules/context-tag-mappings/rule-library-api-name/<RULE_LIBRARY_API_NAME>/version-number/<VERSION_NUMBER>" --target-org <sf_alias>
+```
+
+Promotions for Transactions is not in the retrieved `RevenueManagementSettings`; read it on
+Revenue Settings.
 
 ### Where this differs from the recorded run
 
@@ -157,6 +164,7 @@ Settings.
 | `GlobalPromotionsManagementPsl` and `PromotionDesigner` | `GlobalPromotionsMgmtBasicPsl` and `PromotionDesignerBasic` | The recipe's pair comes with Loyalty Management. The Basic pair is the Revenue Cloud add-on, and the only one the repo's scratch orgs have |
 | `enableGlobalPromotionsForRevenueCloud` already on | Deployed in step 1b | No Setup switch sets it on a fresh org |
 | Fixed window, 1–30 November 2026 | Starts today | A fixed window stops applying once it passes |
+| Coupon created with `Type=Single-Code` | No `Type` | The meshmesh org's Coupon has a `Type` field; a `prepare_rlm_org` scratch org has none and rejects it |
 
 The recorded run's tag-mapping helper uses `grep -oP`, which macOS's grep doesn't have;
 see [`browser-automation-appendix.md`](browser-automation-appendix.md).

@@ -243,8 +243,12 @@ The recorded run used `v66.0` in this path; the repo is on `v68.0`.
 3. Create the coupon code:
 
    ```bash
-   sf data create record --sobject Coupon --values "PromotionId=<PROMOTION_ID> CouponCode=<COUPON_CODE> Status=Active Type=Single-Code StartDateTime=<START_DATETIME_UTC> EndDateTime=<END_DATETIME_UTC> Description='<COUPON_DESCRIPTION>'" --target-org <sf_alias>
+   sf data create record --sobject Coupon --values "PromotionId=<PROMOTION_ID> CouponCode=<COUPON_CODE> Status=Active StartDateTime=<START_DATETIME_UTC> EndDateTime=<END_DATETIME_UTC> Description='<COUPON_DESCRIPTION>'" --target-org <sf_alias>
    ```
+
+   The recorded run also set `Type=Single-Code`. Add it only where the org's Coupon has a
+   `Type` field; a `prepare_rlm_org` scratch org has none and rejects the command with
+   `No such column 'Type' on sobject of type Coupon`.
 
 4. Activate the promotion:
 
